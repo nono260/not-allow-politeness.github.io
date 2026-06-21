@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吃豆小游戏</title>
+
+<style>
+body{
+    margin:0;
+    background:#111;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+}
+
+h1{
+    margin-bottom:10px;
+}
+
+#score{
+    font-size:24px;
+    margin-bottom:15px;
+}
+
+#game{
+    width:500px;
+    height:500px;
+    background:#222;
+    border:3px solid #fff;
+    position:relative;
+    overflow:hidden;
+}
+
+#player{
+    width:30px;
+    height:30px;
+    background:#00aaff;
+    position:absolute;
+    left:0;
+    top:0;
+    border-radius:5px;
+}
+
+#food{
+    width:25px;
+    height:25px;
+    background:red;
+    position:absolute;
+    border-radius:50%;
+}
+</style>
+</head>
+<body>
+
+<h1>吃豆小游戏</h1>
+<div id="score">分数：0</div>
+
+<div id="game">
+    <div id="player"></div>
+    <div id="food"></div>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const food = document.getElementById("food");
+const scoreText = document.getElementById("score");
+
+let x = 0;
+let y = 0;
+let score = 0;
+const speed = 20;
+
+function moveFood(){
+    food.style.left =
+        Math.floor(Math.random()*470) + "px";
+    food.style.top =
+        Math.floor(Math.random()*470) + "px";
+}
+
+moveFood();
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="ArrowUp") y-=speed;
+    if(e.key==="ArrowDown") y+=speed;
+    if(e.key==="ArrowLeft") x-=speed;
+    if(e.key==="ArrowRight") x+=speed;
+
+    x=Math.max(0,Math.min(470,x));
+    y=Math.max(0,Math.min(470,y));
+
+    player.style.left=x+"px";
+    player.style.top=y+"px";
+
+    const pRect=player.getBoundingClientRect();
+    const fRect=food.getBoundingClientRect();
+
+    if(
+        pRect.left < fRect.right &&
+        pRect.right > fRect.left &&
+        pRect.top < fRect.bottom &&
+        pRect.bottom > fRect.top
+    ){
+        score++;
+        scoreText.textContent="分数："+score;
+        moveFood();
+    }
+});
+</script>
+
+</body>
+</html>
